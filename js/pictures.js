@@ -92,13 +92,13 @@ var createDomElementFromTemplate = function (templateId, objectData) {
 };
 
 // Отрисовывает сгенерированные DOM-элементы в блок parentNode
-var createBlock = function (parentNode, templateId, array) {
+var createBlock = function (parentNodeClassName, templateId, commentObjects) {
   var fragment = document.createDocumentFragment();
-  var parent = document.querySelector(parentNode);
-  for (var i = 0; i < array.length; i++) {
-    fragment.appendChild(createDomElementFromTemplate(templateId, array[i]));
+  var parentNode = document.querySelector(parentNodeClassName);
+  for (var i = 0; i < commentObjects.length; i++) {
+    fragment.appendChild(createDomElementFromTemplate(templateId, commentObjects[i]));
   }
-  parent.appendChild(fragment);
+  parentNode.appendChild(fragment);
 };
 
 // Показывает большую картинку с комментариями и лайками
@@ -114,9 +114,9 @@ var showBigPicture = function (objectData) {
   document.querySelector('.social__comment-count').classList.add('visually-hidden');
 
   // Удаляет уже существующие комментарии из разметки
-  var parent = document.querySelector('.social__comments');
-  while (parent.firstChild) {
-    parent.removeChild(parent.firstChild);
+  var parentNode = document.querySelector('.social__comments');
+  while (parentNode.firstChild) {
+    parentNode.removeChild(parentNode.firstChild);
   }
 
   // Наполнет разметку данными из объекта: фото, количество лайков, количество комментариев, подпись к фотографии
@@ -128,13 +128,13 @@ var showBigPicture = function (objectData) {
   // Добавляем комментарии из массива комментариев
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < objectData.comments.length; i++) {
-    var nextComment = document.querySelector('#big-comment').content;
-    nextComment.cloneNode(true);
-    nextComment.querySelector('img').setAttribute('src', 'img/avatar-' + getRandomPeriod(1, 6) + '.svg');
-    nextComment.querySelector('.social__text').textContent = objectData.comments[i];
-    fragment.appendChild(nextComment);
+    var templateCommentMarkup = document.querySelector('#big-comment').content;
+    var сommentNode = templateCommentMarkup.cloneNode(true);
+    сommentNode.querySelector('img').setAttribute('src', 'img/avatar-' + getRandomPeriod(1, 6) + '.svg');
+    сommentNode.querySelector('.social__text').textContent = objectData.comments[i];
+    fragment.appendChild(сommentNode);
   }
-  parent.appendChild(fragment);
+  parentNode.appendChild(fragment);
 };
 
 // Начало
