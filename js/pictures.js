@@ -1,9 +1,16 @@
 'use strict';
 
+// Константы
 var NUMBER_OF_PHOTOS = 25;
 var KEYCODE_ESCAPE = 27;
 var KEYCODE_ENTER = 13;
+var MAX_VALUE = 100;
+var MIN_VALUE = 0;
+var MAX_SCALE_VALUE = 100;
+var MIN_SCALE_VALUE = 25;
+var SCALE_STEP = 25;
 
+// Переменные
 var imgUploadOverlayElement = document.querySelector('.img-upload__overlay');
 var imgUploadInputElement = document.querySelector('#upload-file');
 var closeUploadButton = imgUploadOverlayElement.querySelector('#upload-cancel');
@@ -17,15 +24,10 @@ var effectLevelValueElement = document.querySelector('.effect-level__value');
 var sliderWrapper = document.querySelector('.img-upload__effect-level');
 var defaultFilter = 'effects__preview--none';
 var currentFilter = defaultFilter;
-var MAX_VALUE = 100;
-var MIN_VALUE = 0;
-var MAX_SCALE_VALUE = 100;
-var MIN_SCALE_VALUE = 25;
 
 var reduceImageSizeButton = document.querySelector('.scale__control--smaller');
 var increaseImageSizeButton = document.querySelector('.scale__control--bigger');
 var imageSizeValueElement = document.querySelector('.scale__control--value');
-var SCALE_STEP = 25;
 
 var photosClass = '.pictures';
 var photoTemplateId = '#picture';
@@ -50,6 +52,7 @@ var descriptions = [
 
 var randomNumbers = [];
 
+// Функции
 // Получает случайное число в заданном диапазоне от beginNumber до endNumber
 var getRandomPeriod = function (beginNumber, endNumber) {
   return Math.round(beginNumber + Math.random() * (endNumber - beginNumber));
@@ -100,7 +103,8 @@ var createPhotoArray = function (numberOfPhotos) {
           url: 'photos/' + getRandomNumberFromArray(randomNumbers) + '.jpg',
           likes: getRandomPeriod(15, 200),
           comments: getComments(getRandomPeriod(1, 2)),
-          description: getDescription()
+          description: getDescription(),
+          commentorAvatar: getRandomPeriod(1, 6)
         }
     );
   }
@@ -114,6 +118,14 @@ var createDomElementFromTemplate = function (templateId, objectData) {
   nextPhoto.querySelector('.picture__img').setAttribute('src', objectData.url);
   nextPhoto.querySelector('.picture__likes').textContent = objectData.likes;
   nextPhoto.querySelector('.picture__comments').textContent = objectData.comments.length;
+  nextPhoto.addEventListener('click', function () {
+    showBigPicture(objectData);
+  });
+  nextPhoto.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === KEYCODE_ENTER) {
+      showBigPicture(objectData);
+    }
+  });
   return nextPhoto;
 };
 
@@ -130,8 +142,18 @@ var createBlock = function (parentNodeClassName, templateId, commentObjects) {
 // Показывает большую картинку с комментариями и лайками
 var showBigPicture = function (objectData) {
 
+  var bigPicture = document.querySelector('.big-picture');
+  var bigPictureClose = document.querySelector('#picture-cancel');
+  bigPictureClose.addEventListener('click', function () {
+    hideElement(bigPicture);
+  });
+  document.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === KEYCODE_ESCAPE) {
+      hideElement(bigPicture);
+    }
+  });
   // Показывает фотку в полноэкранном режиме
-  document.querySelector('.big-picture').classList.remove('hidden');
+  showElement(bigPicture);
 
   // Прячет кнопку загрузки комментариев
   document.querySelector('.comments-loader').classList.add('visually-hidden');
@@ -156,14 +178,14 @@ var showBigPicture = function (objectData) {
   for (var i = 0; i < objectData.comments.length; i++) {
     var templateCommentMarkup = document.querySelector('#big-comment').content;
     var commentNode = templateCommentMarkup.cloneNode(true);
-    commentNode.querySelector('img').setAttribute('src', 'img/avatar-' + getRandomPeriod(1, 6) + '.svg');
+    commentNode.querySelector('img').setAttribute('src', 'img/avatar-' + objectData.commentorAvatar + '.svg');
     commentNode.querySelector('.social__text').textContent = objectData.comments[i];
     fragment.appendChild(commentNode);
   }
   parentNode.appendChild(fragment);
 };
 
-// Закрыть всплывающее окно element, если передано clearInputValue то очистить
+// Закрывает всплывающее окно element, если передано clearInputValue то очистить
 var hideElement = function (element, clearInputValue) {
   if (clearInputValue) {
     clearInputValue.value = '';
@@ -171,23 +193,9 @@ var hideElement = function (element, clearInputValue) {
   element.classList.add('hidden');
 };
 
-// Открыть всплывающее окно element
+// Открывает всплывающее окно element
 var showElement = function (element) {
   element.classList.remove('hidden');
-};
-
-// Обрабатываем закрытие формы по escape
-var escapeKeyCloseHandler = function (evt) {
-  if (evt.keyCode === KEYCODE_ESCAPE) {
-    // очищаем форму ввода, чтобы можно было загрузить такую же фотографию
-    hideElement(imgUploadOverlayElement, imgUploadInputElement);
-  }
-};
-
-// Обрабатываем закрытие формы кликом на крестик
-var closeButtonClickHandler = function () {
-  // очищаем форму ввода, чтобы можно было загрузить такую же фотографию
-  hideElement(imgUploadOverlayElement, imgUploadInputElement);
 };
 
 // Получает значение фильтра
@@ -226,9 +234,9 @@ var setScaleValue = function (value) {
   imgUploadPreviewElement.style.transform = 'scale(' + (value / 100) + ')';
 };
 
-
 // Добавляем обработчики событий
 var addListeners = function () {
+
   // Событие загрузки фотографии
   imgUploadInputElement.addEventListener('change', function () {
     // Показываем окно изменения фотографии
@@ -246,7 +254,7 @@ var addListeners = function () {
     var effectLevelBarStartX = document.querySelector('.effect-level__line').getBoundingClientRect().left;
     var effectLevelBarWidth = document.querySelector('.effect-level__line').getBoundingClientRect().width;
     var startXCoord = evt.clientX;
-    var onMouseMove = function (moveEvt) {
+    var sliderMouseMoveHandler = function (moveEvt) {
       if ((moveEvt.clientX <= effectLevelBarEndX) && (moveEvt.clientX >= effectLevelBarStartX)) {
         // console.log(effectLevelBarStartX + ' - ' + moveEvt.clientX + ' - ' + effectLevelBarEndX);
         var shift = moveEvt.clientX - startXCoord;
@@ -265,16 +273,16 @@ var addListeners = function () {
         startXCoord = moveEvt.clientX;
       }
     };
-    var onMouseUp = function () {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
+    var sliderMouseUpHandler = function () {
+      document.removeEventListener('mousemove', sliderMouseMoveHandler);
+      document.removeEventListener('mouseup', sliderMouseUpHandler);
     };
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('mousemove', sliderMouseMoveHandler);
+    document.addEventListener('mouseup', sliderMouseUpHandler);
   });
 
   // Функция добавления листенера нажатия на превьюшки с эффектами
-  var onThumbnailClick = function (element) {
+  var thumbnailClickHandler = function (element) {
     element.addEventListener('click', function () {
       // Убираем все классы эффектов
       while (imgUploadPreviewElement.classList.length) {
@@ -300,7 +308,7 @@ var addListeners = function () {
 
   // Устанавливаем листенер нажатия на превьюшки с эффектами
   for (var effectNumber = 0; effectNumber < previewContainerCollection.length; effectNumber++) {
-    onThumbnailClick(previewContainerCollection[effectNumber]);
+    thumbnailClickHandler(previewContainerCollection[effectNumber]);
   }
 
   // Увеличивает фотографию по клику на кнопку увеличения фотографии
@@ -330,10 +338,20 @@ var addListeners = function () {
   });
 
   // Обрабатывает клик по кресту окна загрузки фотографии
-  closeUploadButton.addEventListener('click', closeButtonClickHandler);
+  closeUploadButton.addEventListener('click', function () {
+    // очищаем форму ввода, чтобы можно было загрузить такую же фотографию
+    hideElement(imgUploadOverlayElement, imgUploadInputElement);
+  }
+  );
 
   // Обрабатывает нажатие клавиши Escape для закрытия окна загрузки фотографии
-  document.addEventListener('keydown', escapeKeyCloseHandler);
+  document.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === KEYCODE_ESCAPE) {
+      // очищаем форму ввода, чтобы можно было загрузить такую же фотографию
+      hideElement(imgUploadOverlayElement, imgUploadInputElement);
+    }
+  }
+  );
 };
 
 // Начало
