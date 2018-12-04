@@ -146,10 +146,12 @@ var showBigPicture = function (objectData) {
   var bigPictureClose = document.querySelector('#picture-cancel');
   bigPictureClose.addEventListener('click', function () {
     hideElement(bigPicture);
+    document.querySelector('body').classList.remove('modal-open');
   });
   document.addEventListener('keydown', function (evt) {
     if (evt.keyCode === KEYCODE_ESCAPE) {
       hideElement(bigPicture);
+      document.querySelector('body').classList.remove('modal-open');
     }
   });
   // Показывает фотку в полноэкранном режиме
