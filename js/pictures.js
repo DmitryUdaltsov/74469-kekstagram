@@ -154,7 +154,8 @@ var showBigPicture = function (objectData) {
   });
   // Показывает фотку в полноэкранном режиме
   showElement(bigPicture);
-
+  // Добавляет класс modal-open к элементу body
+  document.querySelector('body').classList.add('modal-open');
   // Прячет кнопку загрузки комментариев
   document.querySelector('.comments-loader').classList.add('visually-hidden');
 
