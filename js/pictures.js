@@ -350,12 +350,11 @@ var addListeners = function () {
 
   // Обрабатывает нажатие клавиши Escape для закрытия окна загрузки фотографии
   document.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === KEYCODE_ESCAPE) {
+    if ((evt.keyCode === KEYCODE_ESCAPE) && (hashtagInputElement !== document.activeElement)) {
       // очищаем форму ввода, чтобы можно было загрузить такую же фотографию
       hideElement(imgUploadOverlayElement, imgUploadInputElement);
     }
-  }
-  );
+  });
 
   hashtagInputElement.addEventListener('blur', function () {
     var doubles = [];
@@ -364,59 +363,49 @@ var addListeners = function () {
     var moreThanFives = [];
     var onlyHashs = [];
     var hashtagsSplit = hashtagInputElement.value.toLowerCase().split(' ');
+    // Удаляем пустые элементы, которые могли образоваться из за нескольких пробелов  подряд
     var hashtags = hashtagsSplit.filter(function (hashtag) {
       return (hashtag !== '');
     });
-    // Проврка на повторяющиеся хэш-теги
+
+    // Проверка хэштегов
     for (var i = 0; i < hashtags.length; i++) {
+      // Проврка на повторяющиеся хэш-теги
       if (hashtags.indexOf(hashtags[i]) !== i) {
         doubles.push(hashtags[i]);
       }
+      // Проверка на хэштеги более 20 символов
       if (hashtags[i].length > 20) {
         tooBigs.push(hashtags[i]);
       }
+      // Проверка на хэштеги не начинающиеся с '#'
       if (hashtags[i].indexOf('#') !== 0) {
         notStartedWithHashs.push(hashtags[i]);
       }
+      // Проверка на максимальное количество хэштегов
       if (i > 4) {
         moreThanFives.push(hashtags[i]);
       }
+      // Проверка на хэштеги состоящие только из '#'
       if (hashtags[i].length === 1) {
         onlyHashs.push(hashtags[i]);
       }
     }
-    // #кот     #котик    #КОТ  #КОТИК #коткотикКОТ кот ОТИК  ##КОООООООООООООООООООООООООООТИИИИИИИИИИИИИИИИИИИИИИИИИК
-    if (doubles.length > 1) {
-      hashtagInputElement.setCustomValidity('Повторяющиеся элементы: ' + doubles.join(', '));
-      console.log('1');
-    } else if (tooBigs.length > 1) {
-      hashtagInputElement.setCustomValidity('Больше 20 символов : ' + tooBigs.join(', '));
-      console.log('2');
-    } else if (notStartedWithHashs.length > 1) {
-      hashtagInputElement.setCustomValidity('Начинаются не с решетки : ' + notStartedWithHashs.join(', '));
-      console.log('3');
-    } else if (moreThanFives.length > 1) {
-      hashtagInputElement.setCustomValidity('Хэштеги сверх пяти положеных : ' + moreThanFives.join(', '));
-      console.log('4');
-    } else if (onlyHashs.length > 1) {
-      hashtagInputElement.setCustomValidity('Хэштеги состоящие только из # : ' + onlyHashs.join(', '));
-      console.log('5');
+
+    if (doubles.length > 0) {
+      hashtagInputElement.setCustomValidity('Удалите повторяющиеся элементы: ' + doubles.join(', '));
+    } else if (tooBigs.length > 0) {
+      hashtagInputElement.setCustomValidity('Отредактируйте хэштеги длиной более 20 символов: ' + tooBigs.join(', '));
+    } else if (notStartedWithHashs.length > 0) {
+      hashtagInputElement.setCustomValidity('Эти хэштеги начинаются не с решетки: ' + notStartedWithHashs.join(', '));
+    } else if (moreThanFives.length > 0) {
+      hashtagInputElement.setCustomValidity('Удалите хэштеги сверх пяти максимально возможных: ' + moreThanFives.join(', '));
+    } else if (onlyHashs.length > 0) {
+      hashtagInputElement.setCustomValidity('Исправьте хэштеги состоящие только из одного символпа #: ' + onlyHashs.join(', '));
     } else {
       hashtagInputElement.setCustomValidity('');
     }
-
-    console.log('Повторяющиеся элементы: ' + doubles.join(', '));
-    console.log('Больше 20 символов : ' + tooBigs.join(', '));
-    console.log('Начинаются не с решетки : ' + notStartedWithHashs.join(', '));
-    console.log('Хэштеги сверх пяти положеных : ' + moreThanFives.join(', '));
-    console.log('Хэштеги состоящие только из # : ' + onlyHashs.join(', '));
-    // Проверка на 5 элементов
-    if (hashtags.length > 4) {
-      console.log('Элементов больше 5');
-    }
-
   });
-
 };
 
 // Начало
