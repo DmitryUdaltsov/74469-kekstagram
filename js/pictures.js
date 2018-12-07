@@ -29,6 +29,7 @@ var reduceImageSizeButton = document.querySelector('.scale__control--smaller');
 var increaseImageSizeButton = document.querySelector('.scale__control--bigger');
 var imageSizeValueElement = document.querySelector('.scale__control--value');
 
+var hashtagInputElement = document.querySelector('.text__hashtags');
 var photosClass = '.pictures';
 var photoTemplateId = '#picture';
 
@@ -355,6 +356,67 @@ var addListeners = function () {
     }
   }
   );
+
+  hashtagInputElement.addEventListener('blur', function () {
+    var doubles = [];
+    var tooBigs = [];
+    var notStartedWithHashs = [];
+    var moreThanFives = [];
+    var onlyHashs = [];
+    var hashtagsSplit = hashtagInputElement.value.toLowerCase().split(' ');
+    var hashtags = hashtagsSplit.filter(function (hashtag) {
+      return (hashtag !== '');
+    });
+    // Проврка на повторяющиеся хэш-теги
+    for (var i = 0; i < hashtags.length; i++) {
+      if (hashtags.indexOf(hashtags[i]) !== i) {
+        doubles.push(hashtags[i]);
+      }
+      if (hashtags[i].length > 20) {
+        tooBigs.push(hashtags[i]);
+      }
+      if (hashtags[i].indexOf('#') !== 0) {
+        notStartedWithHashs.push(hashtags[i]);
+      }
+      if (i > 4) {
+        moreThanFives.push(hashtags[i]);
+      }
+      if (hashtags[i].length === 1) {
+        onlyHashs.push(hashtags[i]);
+      }
+    }
+    // #кот     #котик    #КОТ  #КОТИК #коткотикКОТ кот ОТИК  ##КОООООООООООООООООООООООООООТИИИИИИИИИИИИИИИИИИИИИИИИИК
+    if (doubles.length > 1) {
+      hashtagInputElement.setCustomValidity('Повторяющиеся элементы: ' + doubles.join(', '));
+      console.log('1');
+    } else if (tooBigs.length > 1) {
+      hashtagInputElement.setCustomValidity('Больше 20 символов : ' + tooBigs.join(', '));
+      console.log('2');
+    } else if (notStartedWithHashs.length > 1) {
+      hashtagInputElement.setCustomValidity('Начинаются не с решетки : ' + notStartedWithHashs.join(', '));
+      console.log('3');
+    } else if (moreThanFives.length > 1) {
+      hashtagInputElement.setCustomValidity('Хэштеги сверх пяти положеных : ' + moreThanFives.join(', '));
+      console.log('4');
+    } else if (onlyHashs.length > 1) {
+      hashtagInputElement.setCustomValidity('Хэштеги состоящие только из # : ' + onlyHashs.join(', '));
+      console.log('5');
+    } else {
+      hashtagInputElement.setCustomValidity('');
+    }
+
+    console.log('Повторяющиеся элементы: ' + doubles.join(', '));
+    console.log('Больше 20 символов : ' + tooBigs.join(', '));
+    console.log('Начинаются не с решетки : ' + notStartedWithHashs.join(', '));
+    console.log('Хэштеги сверх пяти положеных : ' + moreThanFives.join(', '));
+    console.log('Хэштеги состоящие только из # : ' + onlyHashs.join(', '));
+    // Проверка на 5 элементов
+    if (hashtags.length > 4) {
+      console.log('Элементов больше 5');
+    }
+
+  });
+
 };
 
 // Начало
@@ -366,7 +428,5 @@ fillArray(1, NUMBER_OF_PHOTOS);
 var photos = createPhotoArray(NUMBER_OF_PHOTOS);
 // Показываем маленькие фотографии в случайном порядке
 createBlock(photosClass, photoTemplateId, photos);
-// Показываем большую картинку
-// showBigPicture(photos[1]);
 
 // Конец
