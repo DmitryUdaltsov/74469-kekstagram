@@ -13,6 +13,7 @@ var SCALE_STEP = 25;
 // Переменные
 var imgUploadOverlayElement = document.querySelector('.img-upload__overlay');
 var imgUploadInputElement = document.querySelector('#upload-file');
+var imgUploadFormElement = document.querySelector('.img-upload__form');
 var closeUploadButton = imgUploadOverlayElement.querySelector('#upload-cancel');
 var imgUploadPreviewElement = document.querySelector('.img-upload__preview').querySelector('img');
 var previewContainerCollection = document.querySelector('.img-upload__effects').querySelectorAll('li');
@@ -238,6 +239,63 @@ var setScaleValue = function (value) {
   imgUploadPreviewElement.style.transform = 'scale(' + (value / 100) + ')';
 };
 
+var hashtagCheckHandler = function () {
+  var doubles = [];
+  var tooBigs = [];
+  var notStartedWithHashs = [];
+  var moreThanFives = [];
+  var onlyHashs = [];
+  var hashtagsSplit = hashtagInputElement.value.toLowerCase().split(' ');
+  // Удаляем пустые элементы, которые могли образоваться из за нескольких пробелов  подряд
+  var hashtags = hashtagsSplit.filter(function (hashtag) {
+    return (hashtag !== '');
+  });
+
+  // Проверка хэштегов
+  for (var i = 0; i < hashtags.length; i++) {
+    // Проврка на повторяющиеся хэш-теги
+    if (hashtags.indexOf(hashtags[i]) !== i) {
+      doubles.push(hashtags[i]);
+    }
+    // Проверка на хэштеги более 20 символов
+    if (hashtags[i].length > 20) {
+      tooBigs.push(hashtags[i]);
+    }
+    // Проверка на хэштеги не начинающиеся с '#'
+    if (hashtags[i].indexOf('#') !== 0) {
+      notStartedWithHashs.push(hashtags[i]);
+    }
+    // Проверка на максимальное количество хэштегов
+    if (i > 4) {
+      moreThanFives.push(hashtags[i]);
+    }
+    // Проверка на хэштеги состоящие только из '#'
+    if (hashtags[i].length === 1) {
+      onlyHashs.push(hashtags[i]);
+    }
+  }
+
+  if (doubles.length > 0) {
+    hashtagInputElement.setCustomValidity('Удалите повторяющиеся элементы: ' + doubles.join(', '));
+    return false;
+  } else if (tooBigs.length > 0) {
+    hashtagInputElement.setCustomValidity('Отредактируйте хэштеги длиной более 20 символов: ' + tooBigs.join(', '));
+    return false;
+  } else if (notStartedWithHashs.length > 0) {
+    hashtagInputElement.setCustomValidity('Эти хэштеги начинаются не с решетки: ' + notStartedWithHashs.join(', '));
+    return false;
+  } else if (moreThanFives.length > 0) {
+    hashtagInputElement.setCustomValidity('Удалите хэштеги сверх пяти максимально возможных: ' + moreThanFives.join(', '));
+    return false;
+  } else if (onlyHashs.length > 0) {
+    hashtagInputElement.setCustomValidity('Исправьте хэштеги состоящие только из одного символпа #: ' + onlyHashs.join(', '));
+    return false;
+  } else {
+    hashtagInputElement.setCustomValidity('');
+    return true;
+  }
+};
+
 // Добавляем обработчики событий
 var addListeners = function () {
 
@@ -260,7 +318,6 @@ var addListeners = function () {
     var startXCoord = evt.clientX;
     var sliderMouseMoveHandler = function (moveEvt) {
       if ((moveEvt.clientX <= effectLevelBarEndX) && (moveEvt.clientX >= effectLevelBarStartX)) {
-        // console.log(effectLevelBarStartX + ' - ' + moveEvt.clientX + ' - ' + effectLevelBarEndX);
         var shift = moveEvt.clientX - startXCoord;
         var shiftPercent = shift * 100 / effectLevelBarWidth;
         var nextValue = Math.round(parseFloat(effectLevelValueElement.value) + parseFloat(shiftPercent));
@@ -356,56 +413,7 @@ var addListeners = function () {
     }
   });
 
-  hashtagInputElement.addEventListener('blur', function () {
-    var doubles = [];
-    var tooBigs = [];
-    var notStartedWithHashs = [];
-    var moreThanFives = [];
-    var onlyHashs = [];
-    var hashtagsSplit = hashtagInputElement.value.toLowerCase().split(' ');
-    // Удаляем пустые элементы, которые могли образоваться из за нескольких пробелов  подряд
-    var hashtags = hashtagsSplit.filter(function (hashtag) {
-      return (hashtag !== '');
-    });
-
-    // Проверка хэштегов
-    for (var i = 0; i < hashtags.length; i++) {
-      // Проврка на повторяющиеся хэш-теги
-      if (hashtags.indexOf(hashtags[i]) !== i) {
-        doubles.push(hashtags[i]);
-      }
-      // Проверка на хэштеги более 20 символов
-      if (hashtags[i].length > 20) {
-        tooBigs.push(hashtags[i]);
-      }
-      // Проверка на хэштеги не начинающиеся с '#'
-      if (hashtags[i].indexOf('#') !== 0) {
-        notStartedWithHashs.push(hashtags[i]);
-      }
-      // Проверка на максимальное количество хэштегов
-      if (i > 4) {
-        moreThanFives.push(hashtags[i]);
-      }
-      // Проверка на хэштеги состоящие только из '#'
-      if (hashtags[i].length === 1) {
-        onlyHashs.push(hashtags[i]);
-      }
-    }
-
-    if (doubles.length > 0) {
-      hashtagInputElement.setCustomValidity('Удалите повторяющиеся элементы: ' + doubles.join(', '));
-    } else if (tooBigs.length > 0) {
-      hashtagInputElement.setCustomValidity('Отредактируйте хэштеги длиной более 20 символов: ' + tooBigs.join(', '));
-    } else if (notStartedWithHashs.length > 0) {
-      hashtagInputElement.setCustomValidity('Эти хэштеги начинаются не с решетки: ' + notStartedWithHashs.join(', '));
-    } else if (moreThanFives.length > 0) {
-      hashtagInputElement.setCustomValidity('Удалите хэштеги сверх пяти максимально возможных: ' + moreThanFives.join(', '));
-    } else if (onlyHashs.length > 0) {
-      hashtagInputElement.setCustomValidity('Исправьте хэштеги состоящие только из одного символпа #: ' + onlyHashs.join(', '));
-    } else {
-      hashtagInputElement.setCustomValidity('');
-    }
-  });
+  hashtagInputElement.addEventListener('blur', hashtagCheckHandler);
 };
 
 // Начало
