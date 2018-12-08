@@ -15,8 +15,8 @@ var imgUploadOverlayElement = document.querySelector('.img-upload__overlay');
 var imgUploadInputElement = document.querySelector('#upload-file');
 var imgUploadFormElement = document.querySelector('.img-upload__form');
 var closeUploadButton = imgUploadOverlayElement.querySelector('#upload-cancel');
-var imgUploadPreviewElement = document.querySelector('.img-upload__preview').querySelector('img');
-var previewContainerCollection = document.querySelector('.img-upload__effects').querySelectorAll('li');
+var imgUploadPreviewElement = document.querySelector('.img-upload__preview img');
+var previewContainerCollection = document.querySelector('.img-upload__effects li');
 
 var effectLevelDepthElement = document.querySelector('.effect-level__depth');
 var effectLevelPinElement = document.querySelector('.effect-level__pin');
@@ -240,11 +240,19 @@ var setScaleValue = function (value) {
 };
 
 var hashtagCheckHandler = function () {
-  var doubles = [];
-  var tooBigs = [];
-  var notStartedWithHashs = [];
-  var moreThanFives = [];
-  var onlyHashs = [];
+  function ErrorObj(messageText) {
+    this.list = [];
+    this.message = function () {
+      return (messageText + this.list.join(', '));
+    };
+  }
+
+  var doubles = new ErrorObj('Удалите повторяющиеся элементы: ');
+  var tooBigs = new ErrorObj('Отредактируйте хэштеги длиной более 20 символов: ');
+  var notStartedWithHashs = new ErrorObj('Эти хэштеги начинаются не с решетки: ');
+  var moreThanFives = new ErrorObj('Удалите хэштеги сверх пяти максимально возможных: ');
+  var onlyHashs = new ErrorObj('Исправьте хэштеги состоящие только из одного символпа #: ');
+
   var hashtagsSplit = hashtagInputElement.value.toLowerCase().split(' ');
   // Удаляем пустые элементы, которые могли образоваться из за нескольких пробелов  подряд
   var hashtags = hashtagsSplit.filter(function (hashtag) {
@@ -255,45 +263,36 @@ var hashtagCheckHandler = function () {
   for (var i = 0; i < hashtags.length; i++) {
     // Проврка на повторяющиеся хэш-теги
     if (hashtags.indexOf(hashtags[i]) !== i) {
-      doubles.push(hashtags[i]);
+      doubles.list.push(hashtags[i]);
     }
     // Проверка на хэштеги более 20 символов
     if (hashtags[i].length > 20) {
-      tooBigs.push(hashtags[i]);
+      tooBigs.list.push(hashtags[i]);
     }
     // Проверка на хэштеги не начинающиеся с '#'
     if (hashtags[i].indexOf('#') !== 0) {
-      notStartedWithHashs.push(hashtags[i]);
+      notStartedWithHashs.list.push(hashtags[i]);
     }
     // Проверка на максимальное количество хэштегов
     if (i > 4) {
-      moreThanFives.push(hashtags[i]);
+      moreThanFives.list.push(hashtags[i]);
     }
     // Проверка на хэштеги состоящие только из '#'
     if (hashtags[i].length === 1) {
-      onlyHashs.push(hashtags[i]);
+      onlyHashs.list.push(hashtags[i]);
     }
   }
 
-  if (doubles.length > 0) {
-    hashtagInputElement.setCustomValidity('Удалите повторяющиеся элементы: ' + doubles.join(', '));
-    return false;
-  } else if (tooBigs.length > 0) {
-    hashtagInputElement.setCustomValidity('Отредактируйте хэштеги длиной более 20 символов: ' + tooBigs.join(', '));
-    return false;
-  } else if (notStartedWithHashs.length > 0) {
-    hashtagInputElement.setCustomValidity('Эти хэштеги начинаются не с решетки: ' + notStartedWithHashs.join(', '));
-    return false;
-  } else if (moreThanFives.length > 0) {
-    hashtagInputElement.setCustomValidity('Удалите хэштеги сверх пяти максимально возможных: ' + moreThanFives.join(', '));
-    return false;
-  } else if (onlyHashs.length > 0) {
-    hashtagInputElement.setCustomValidity('Исправьте хэштеги состоящие только из одного символпа #: ' + onlyHashs.join(', '));
-    return false;
-  } else {
-    hashtagInputElement.setCustomValidity('');
-    return true;
+  var errors = [doubles, tooBigs, notStartedWithHashs, moreThanFives, onlyHashs];
+  for (var j = 0; j < errors.length; j++) {
+    if (errors[j].list.length > 0) {
+      hashtagInputElement.setCustomValidity(errors[j].message());
+      return false;
+    }
   }
+  hashtagInputElement.setCustomValidity('');
+
+  return true;
 };
 
 // Добавляем обработчики событий
@@ -413,7 +412,8 @@ var addListeners = function () {
     }
   });
 
-  hashtagInputElement.addEventListener('blur', hashtagCheckHandler);
+  hashtagInputElement.addEventListener('input', hashtagCheckHandler);
+  imgUploadFormElement.addEventListener('submit', hashtagCheckHandler);
 };
 
 // Начало
