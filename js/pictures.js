@@ -240,12 +240,12 @@ var setScaleValue = function (value) {
 };
 
 var hashtagCheckHandler = function () {
-  function ErrorObj(messageText) {
+  var ErrorObj = function (messageText) {
     this.list = [];
     this.message = function () {
       return (messageText + this.list.join(', '));
     };
-  }
+  };
 
   var doubles = new ErrorObj('Удалите повторяющиеся элементы: ');
   var tooBigs = new ErrorObj('Отредактируйте хэштеги длиной более 20 символов: ');
@@ -253,11 +253,14 @@ var hashtagCheckHandler = function () {
   var moreThanFives = new ErrorObj('Удалите хэштеги сверх пяти максимально возможных: ');
   var onlyHashs = new ErrorObj('Исправьте хэштеги состоящие только из одного символпа #: ');
 
-  var hashtagsSplit = hashtagInputElement.value.toLowerCase().split(' ');
-  // Удаляем пустые элементы, которые могли образоваться из за нескольких пробелов  подряд
-  var hashtags = hashtagsSplit.filter(function (hashtag) {
-    return (hashtag !== '');
-  });
+  var hashtags = hashtagInputElement
+    .value
+    .toLowerCase()
+    .split(' ')
+    .filter(function (hashtag) {
+    // Удаляем пустые элементы, которые могли образоваться из за нескольких пробелов  подряд
+      return (hashtag !== '');
+    });
 
   // Проверка хэштегов
   for (var i = 0; i < hashtags.length; i++) {
