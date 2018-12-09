@@ -18,7 +18,7 @@ var imgUploadInputElement = document.querySelector('#upload-file');
 var imgUploadFormElement = document.querySelector('.img-upload__form');
 var closeUploadButton = imgUploadOverlayElement.querySelector('#upload-cancel');
 var imgUploadPreviewElement = document.querySelector('.img-upload__preview img');
-var previewContainerCollection = document.querySelector('.img-upload__effects li');
+var previewContainerCollection = document.querySelectorAll('.effects__item');
 
 var effectLevelDepthElement = document.querySelector('.effect-level__depth');
 var effectLevelPinElement = document.querySelector('.effect-level__pin');
