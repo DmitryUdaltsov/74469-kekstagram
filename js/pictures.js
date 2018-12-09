@@ -9,6 +9,8 @@ var MIN_VALUE = 0;
 var MAX_SCALE_VALUE = 100;
 var MIN_SCALE_VALUE = 25;
 var SCALE_STEP = 25;
+var HASHTAG_MAX_LENGH = 20;
+var HASHTAG_MAX_COUNT = 4;
 
 // Переменные
 var imgUploadOverlayElement = document.querySelector('.img-upload__overlay');
@@ -16,7 +18,7 @@ var imgUploadInputElement = document.querySelector('#upload-file');
 var imgUploadFormElement = document.querySelector('.img-upload__form');
 var closeUploadButton = imgUploadOverlayElement.querySelector('#upload-cancel');
 var imgUploadPreviewElement = document.querySelector('.img-upload__preview img');
-var previewContainerCollection = document.querySelector('.img-upload__effects li');
+var previewContainerCollection = document.querySelectorAll('.effects__item');
 
 var effectLevelDepthElement = document.querySelector('.effect-level__depth');
 var effectLevelPinElement = document.querySelector('.effect-level__pin');
@@ -248,7 +250,7 @@ var hashtagCheckHandler = function () {
   };
 
   var doubles = new ErrorObj('Удалите повторяющиеся элементы: ');
-  var tooBigs = new ErrorObj('Отредактируйте хэштеги длиной более 20 символов: ');
+  var tooBigs = new ErrorObj('Отредактируйте хэштеги длиной более ' + HASHTAG_MAX_LENGH + ' символов: ');
   var notStartedWithHashs = new ErrorObj('Эти хэштеги начинаются не с решетки: ');
   var moreThanFives = new ErrorObj('Удалите хэштеги сверх пяти максимально возможных: ');
   var onlyHashs = new ErrorObj('Исправьте хэштеги состоящие только из одного символпа #: ');
@@ -264,12 +266,12 @@ var hashtagCheckHandler = function () {
 
   // Проверка хэштегов
   for (var i = 0; i < hashtags.length; i++) {
-    // Проврка на повторяющиеся хэш-теги
+    // Проверка на повторяющиеся хэш-теги
     if (hashtags.indexOf(hashtags[i]) !== i) {
       doubles.list.push(hashtags[i]);
     }
     // Проверка на хэштеги более 20 символов
-    if (hashtags[i].length > 20) {
+    if (hashtags[i].length > HASHTAG_MAX_LENGH) {
       tooBigs.list.push(hashtags[i]);
     }
     // Проверка на хэштеги не начинающиеся с '#'
@@ -277,7 +279,7 @@ var hashtagCheckHandler = function () {
       notStartedWithHashs.list.push(hashtags[i]);
     }
     // Проверка на максимальное количество хэштегов
-    if (i > 4) {
+    if (i > HASHTAG_MAX_COUNT) {
       moreThanFives.list.push(hashtags[i]);
     }
     // Проверка на хэштеги состоящие только из '#'
@@ -322,7 +324,7 @@ var addListeners = function () {
       if ((moveEvt.clientX <= effectLevelBarEndX) && (moveEvt.clientX >= effectLevelBarStartX)) {
         var shift = moveEvt.clientX - startXCoord;
         var shiftPercent = shift * 100 / effectLevelBarWidth;
-        var nextValue = Math.round(parseFloat(effectLevelValueElement.value) + parseFloat(shiftPercent));
+        var nextValue = parseFloat(effectLevelValueElement.value) + parseFloat(shiftPercent);
         // Костыль для слайдера уходящего в минус и в бесконечность
         if (nextValue < MIN_VALUE) {
           nextValue = MIN_VALUE;
