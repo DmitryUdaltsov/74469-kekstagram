@@ -324,7 +324,7 @@ var addListeners = function () {
       if ((moveEvt.clientX <= effectLevelBarEndX) && (moveEvt.clientX >= effectLevelBarStartX)) {
         var shift = moveEvt.clientX - startXCoord;
         var shiftPercent = shift * 100 / effectLevelBarWidth;
-        var nextValue = Math.round(parseFloat(effectLevelValueElement.value) + parseFloat(shiftPercent));
+        var nextValue = parseFloat(effectLevelValueElement.value) + parseFloat(shiftPercent);
         // Костыль для слайдера уходящего в минус и в бесконечность
         if (nextValue < MIN_VALUE) {
           nextValue = MIN_VALUE;
