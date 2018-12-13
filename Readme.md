@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Dmitry Udaltsov](https://up.htmlacademy.ru/javascript/16/user/74469).
-* Наставник: [Игорь Тараканов](https://htmlacademy.ru/profile/id487569).
+* Наставник: [Владислав Молчанов](https://htmlacademy.ru/profile/id137398).
 
 ---
 
