@@ -1,10 +1,6 @@
 'use strict';
 
 (function () {
-  var imgUploadInputElement = document.querySelector('#upload-file');
-  var imgUploadOverlayElement = document.querySelector('.img-upload__overlay');
-  var closeUploadButton = imgUploadOverlayElement.querySelector('#upload-cancel');
-  window.imgUploadPreviewElement = document.querySelector('.img-upload__preview img');
   // Показывает большую картинку с комментариями и лайками
   window.showBigPicture = function (objectData) {
 
@@ -38,8 +34,11 @@
 
     // Наполнет разметку данными из объекта: фото, количество лайков, количество комментариев, подпись к фотографии
     document.querySelector('.big-picture__img').querySelector('img').setAttribute('src', objectData.url);
+    // Количество лайков
     document.querySelector('.likes-count').textContent = objectData.likes;
+    // Количество коментариев
     document.querySelector('.comments-count').textContent = objectData.comments.length;
+    // Подпись к фотографии
     document.querySelector('.social__caption').textContent = objectData.description;
 
     // Добавляем комментарии из массива комментариев
@@ -47,36 +46,12 @@
     for (var i = 0; i < objectData.comments.length; i++) {
       var templateCommentMarkup = document.querySelector('#big-comment').content;
       var commentNode = templateCommentMarkup.cloneNode(true);
-      commentNode.querySelector('img').setAttribute('src', 'img/avatar-' + objectData.commentorAvatar + '.svg');
-      commentNode.querySelector('.social__text').textContent = objectData.comments[i];
+      // Аватар коментатора
+      commentNode.querySelector('img').setAttribute('src', objectData.comments[i].avatar);
+      // Сообщение коментатора
+      commentNode.querySelector('.social__text').textContent = objectData.comments[i].message;
       fragment.appendChild(commentNode);
     }
     parentNode.appendChild(fragment);
   };
-
-  // Добавляем обработчики событий
-
-  // Событие загрузки фотографии
-  imgUploadInputElement.addEventListener('change', function () {
-    // Показываем окно изменения фотографии
-    window.showElement(imgUploadOverlayElement);
-    // Прячем слайдер
-    window.hideElement(window.sliderWrapper);
-    window.imageSizeValueElement.setAttribute('value', window.DEFAULT_VALUE + '%');
-    window.imgUploadPreviewElement.style.transform = 'scale(' + (window.DEFAULT_VALUE / 100) + ')';
-  });
-
-  // Обрабатывает клик по кресту окна загрузки фотографии
-  closeUploadButton.addEventListener('click', function () {
-    // очищаем форму ввода, чтобы можно было загрузить такую же фотографию
-    window.hideElement(imgUploadOverlayElement, imgUploadInputElement);
-  });
-
-  // Обрабатывает нажатие клавиши Escape для закрытия окна загрузки фотографии
-  document.addEventListener('keydown', function (evt) {
-    if ((evt.keyCode === window.KEYCODE_ESCAPE) && (window.hashtagInputElement !== document.activeElement)) {
-      // очищаем форму ввода, чтобы можно было загрузить такую же фотографию
-      window.hideElement(imgUploadOverlayElement, imgUploadInputElement);
-    }
-  });
 })();

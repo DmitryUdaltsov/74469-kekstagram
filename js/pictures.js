@@ -26,17 +26,30 @@
   };
 
   // Отрисовывает сгенерированные DOM-элементы в блок parentNode
-  var createBlock = function (parentNodeClassName, templateId, commentObjects) {
+  var createBlock = function (commentObjects) {
     var fragment = document.createDocumentFragment();
-    var parentNode = document.querySelector(parentNodeClassName);
+    var parentNode = document.querySelector(photosClass);
     for (var i = 0; i < commentObjects.length; i++) {
-      fragment.appendChild(createDomElementFromTemplate(templateId, commentObjects[i]));
+      fragment.appendChild(createDomElementFromTemplate(photoTemplateId, commentObjects[i]));
     }
     parentNode.appendChild(fragment);
   };
 
+  // Плашка сверху сайта об ошибке загрузки фотографий
+  var errorHandler = function (errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; padding: 20px 0';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+
   // Начало
   // Показываем маленькие фотографии в случайном порядке
-  createBlock(photosClass, photoTemplateId, window.photos);
+  window.backend.load(createBlock, errorHandler);
   // Конец
 })();
