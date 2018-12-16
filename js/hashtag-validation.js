@@ -3,10 +3,9 @@
 (function () {
   var HASHTAG_MAX_LENGH = 20;
   var HASHTAG_MAX_COUNT = 4;
-  var imgUploadFormElement = document.querySelector('.img-upload__form');
   window.hashtagInputElement = document.querySelector('.text__hashtags');
 
-  var hashtagCheckHandler = function () {
+  var hashtagValidation = function () {
     var ErrorObj = function (messageText) {
       this.list = [];
       this.message = function () {
@@ -64,6 +63,5 @@
 
     return true;
   };
-  window.hashtagInputElement.addEventListener('input', hashtagCheckHandler);
-  imgUploadFormElement.addEventListener('submit', hashtagCheckHandler);
+  window.hashtagInputElement.addEventListener('input', hashtagValidation);
 })();
