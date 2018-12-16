@@ -41,11 +41,11 @@
    * @param {string} templateSelector error или success
    */
   var showMessage = function (templateSelector) {
+
     closeUploadPhotoPopup();
-    var buttonClassName = '.' + templateSelector + '__button';
 
     var closeMessagePopup = function () {
-      var messageDomElement = document.getElementsByClassName(templateSelector)[0];
+      var messageDomElement = document.querySelector('.' + templateSelector);
       document.querySelector('main').removeChild(messageDomElement);
       document.removeEventListener('click', clickAnywhereHandler);
       document.removeEventListener('keydown', escapeHandler);
@@ -72,14 +72,15 @@
     };
 
     // Темплэйт с сообщением
-    var templateBlock = document.getElementById(templateSelector).content;
+    var templateBlock = document.querySelector('#' + templateSelector).content;
     // Добавляем темплейт в блок main
-    var messageNode = templateBlock.cloneNode(true);
-    document.querySelector('main').appendChild(messageNode);
+    var messageElement = templateBlock.cloneNode(true);
+    document.querySelector('main').appendChild(messageElement);
 
     document.addEventListener('click', clickAnywhereHandler);
     document.addEventListener('keydown', escapeHandler);
-    //
+
+    var buttonClassName = '.' + templateSelector + '__button';
     var button = document.querySelector(buttonClassName);
     button.addEventListener('keydown', enterHandler);
   };

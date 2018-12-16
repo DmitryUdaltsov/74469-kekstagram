@@ -5,7 +5,7 @@
   var HASHTAG_MAX_COUNT = 4;
   window.hashtagInputElement = document.querySelector('.text__hashtags');
 
-  window.hashtagValidation = function () {
+  var hashtagValidation = function () {
     var ErrorObj = function (messageText) {
       this.list = [];
       this.message = function () {
@@ -63,5 +63,5 @@
 
     return true;
   };
-  window.hashtagInputElement.addEventListener('input', window.hashtagValidation);
+  window.hashtagInputElement.addEventListener('input', hashtagValidation);
 })();
