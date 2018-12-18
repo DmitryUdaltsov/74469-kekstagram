@@ -1,5 +1,8 @@
 'use strict';
 
+/**
+ *  Отображает плитку из маленьких фотографий на странице
+ */
 (function () {
   // Переменные
   var photosClass = '.pictures';
@@ -26,9 +29,14 @@
   };
 
   // Отрисовывает сгенерированные DOM-элементы в блок parentNode
-  var createBlock = function (commentObjects) {
+  window.createBlock = function (commentObjects) {
     var fragment = document.createDocumentFragment();
     var parentNode = document.querySelector(photosClass);
+    // Очищаем блок с отрисовыванными плитками фотографий
+    var picturesCollection = document.querySelectorAll('.pictures .picture');
+    for (var j = 0; j < picturesCollection.length; j++) {
+      picturesCollection[j].remove();
+    }
     for (var i = 0; i < commentObjects.length; i++) {
       fragment.appendChild(createDomElementFromTemplate(photoTemplateId, commentObjects[i]));
     }
@@ -48,8 +56,12 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
-  // Начало
-  // Показываем маленькие фотографии в случайном порядке
-  window.backend.load(createBlock, errorHandler);
-  // Конец
+  var successHandler = function (photos) {
+    window.createBlock(photos);
+    window.getSortedArray(photos);
+  };
+
+  // Показываем маленькие фотографии
+  window.backend.load(successHandler, errorHandler);
+
 })();
