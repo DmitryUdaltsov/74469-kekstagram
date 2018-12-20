@@ -4,22 +4,28 @@
   var imgUploadInputElement = document.querySelector('#upload-file');
   var imgUploadOverlayElement = document.querySelector('.img-upload__overlay');
   var closeUploadButton = imgUploadOverlayElement.querySelector('#upload-cancel');
+  var filtersRadioButtons = document.querySelectorAll('.effects__radio');
 
   window.imgUploadPreviewElement = document.querySelector('.img-upload__preview img');
 
   var closeUploadPhotoPopup = function () {
-    window.hideElement(imgUploadOverlayElement, imgUploadInputElement);
+    window.elementControl.hideElement(imgUploadOverlayElement, imgUploadInputElement);
     imgUploadFormElement.reset();
   };
 
   // Событие загрузки фотографии
   imgUploadInputElement.addEventListener('change', function () {
     // Показываем окно изменения фотографии
-    window.showElement(imgUploadOverlayElement);
+    window.elementControl.showElement(imgUploadOverlayElement);
     // Прячем слайдер
-    window.hideElement(window.sliderWrapper);
+    window.elementControl.hideElement(window.sliderWrapper);
     window.imageSizeValueElement.setAttribute('value', window.DEFAULT_VALUE + '%');
     window.imgUploadPreviewElement.style.transform = 'scale(' + (window.DEFAULT_VALUE / 100) + ')';
+    window.imgUploadPreviewElement.removeAttribute('class');
+    for (var i = 0; i < filtersRadioButtons.length; i++) {
+      filtersRadioButtons[i].removeAttribute('checked');
+    }
+    document.querySelector('#effect-none').setAttribute('checked', true);
   });
 
   // Обрабатывает клик по кресту окна загрузки фотографии
@@ -30,7 +36,7 @@
 
   // Обрабатывает нажатие клавиши Escape для закрытия окна загрузки фотографии
   document.addEventListener('keydown', function (evt) {
-    if ((evt.keyCode === window.KEYCODE_ESCAPE) && (window.hashtagInputElement !== document.activeElement)) {
+    if ((evt.keyCode === window.utils.KEYCODE_ESCAPE) && (window.hashtagInputElement !== document.activeElement)) {
       // очищаем форму ввода, чтобы можно было загрузить такую же фотографию
       closeUploadPhotoPopup();
     }
@@ -59,14 +65,14 @@
 
     // Закрывает сообщение по Esc
     var escapeHandler = function (evt) {
-      if (evt.keyCode === window.KEYCODE_ESCAPE) {
+      if (evt.keyCode === window.utils.KEYCODE_ESCAPE) {
         closeMessagePopup();
       }
     };
 
     // Закрывает сообщение по Enter
     var enterHandler = function (evt) {
-      if (evt.keyCode === window.KEYCODE_ENTER) {
+      if (evt.keyCode === window.utils.KEYCODE_ENTER) {
         closeMessagePopup();
       }
     };

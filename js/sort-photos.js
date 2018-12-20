@@ -9,6 +9,14 @@
     // Показывает кнопки фильтров
     document.querySelector('.img-filters').classList.remove('img-filters--inactive');
 
+    var makeActiveButton = function (activeButton) {
+      var imgFiltersButtonCollection = document.querySelectorAll('.img-filters__button');
+      for (var i = 0; i < imgFiltersButtonCollection.length; i++) {
+        // Убираем у всех кнопок класс активности
+        imgFiltersButtonCollection[i].classList.remove('img-filters__button--active');
+      }
+      activeButton.classList.add('img-filters__button--active');
+    };
 
     var getRandomPhotos = function (numberOfPhotos) {
       var photosNew = [];
@@ -44,21 +52,25 @@
 
     var newButtonClickHandler = window.debounce(function () {
       window.createBlock(getRandomPhotos(NEW_PHOTOS_COUNT));
+      makeActiveButton(filterNewButton);
     });
 
     var newButtonEnterHandler = window.debounce(function (evt) {
-      if (evt.keyCode === window.KEYCODE_ENTER) {
+      if (evt.keyCode === window.utils.KEYCODE_ENTER) {
         window.createBlock(getRandomPhotos(NEW_PHOTOS_COUNT));
+        makeActiveButton(filterNewButton);
       }
     });
 
     var popularButtonClickHandler = window.debounce(function () {
       window.createBlock(photos);
+      makeActiveButton(filterPopularButton);
     });
 
     var popularButtonEnterHandler = window.debounce(function (evt) {
-      if (evt.type === 'click' || evt.keyCode === window.KEYCODE_ENTER) {
+      if (evt.type === 'click' || evt.keyCode === window.utils.KEYCODE_ENTER) {
         window.createBlock(photos);
+        makeActiveButton(filterPopularButton);
       }
     });
 
@@ -66,13 +78,15 @@
       window.createBlock(photos.slice().sort(function (left, right) {
         return right.comments.length - left.comments.length;
       }));
+      makeActiveButton(filterDiscussedButton);
     });
 
     var discussedButtonEnterHandler = window.debounce(function (evt) {
-      if (evt.keyCode === window.KEYCODE_ENTER) {
+      if (evt.keyCode === window.utils.KEYCODE_ENTER) {
         window.createBlock(photos.slice().sort(function (left, right) {
           return right.comments.length - left.comments.length;
         }));
+        makeActiveButton(filterDiscussedButton);
       }
     });
 

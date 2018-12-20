@@ -26,13 +26,13 @@
     };
 
     var moreCommentsButtonEnterHandler = function (evt) {
-      if (evt.keyCode === window.KEYCODE_ENTER) {
+      if (evt.keyCode === window.utils.KEYCODE_ENTER) {
         showNextComments();
       }
     };
 
     var closePopup = function () {
-      window.hideElement(bigPicture);
+      window.elementControl.hideElement(bigPicture);
       document.querySelector('body').classList.remove('modal-open');
       moreCommentsButton.removeEventListener('click', moreCommentsButtonClickHandler);
       moreCommentsButton.removeEventListener('click', moreCommentsButtonEnterHandler);
@@ -45,13 +45,13 @@
 
     // Закрывает попап большой фотографии по нажатию Esc
     document.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === window.KEYCODE_ESCAPE) {
+      if (evt.keyCode === window.utils.KEYCODE_ESCAPE) {
         closePopup();
       }
     });
 
     // Показываем фотку в полноэкранном режиме
-    window.showElement(bigPicture);
+    window.elementControl.showElement(bigPicture);
 
     // Добавляем класс modal-open к элементу body
     document.querySelector('body').classList.add('modal-open');

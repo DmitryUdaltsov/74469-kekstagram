@@ -43,9 +43,9 @@
 
       // Показывает слайдер на всех картинках кроме фильтра Original
       if (window.currentFilter !== defaultFilter) {
-        window.showElement(window.sliderWrapper);
+        window.elementControl.showElement(window.sliderWrapper);
       } else {
-        window.hideElement(window.sliderWrapper);
+        window.elementControl.hideElement(window.sliderWrapper);
       }
 
       // Устанавливаем максимальное значение

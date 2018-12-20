@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
-  window.KEYCODE_ESCAPE = 27;
-  window.KEYCODE_ENTER = 13;
+  window.utils = {
+    KEYCODE_ESCAPE: 27,
+    KEYCODE_ENTER: 13
+  };
 })();
