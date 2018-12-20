@@ -30,7 +30,7 @@
 
   // Обрабатывает нажатие клавиши Escape для закрытия окна загрузки фотографии
   document.addEventListener('keydown', function (evt) {
-    if ((evt.keyCode === window.utlis.KEYCODE_ESCAPE) && (window.hashtagInputElement !== document.activeElement)) {
+    if ((evt.keyCode === window.utils.KEYCODE_ESCAPE) && (window.hashtagInputElement !== document.activeElement)) {
       // очищаем форму ввода, чтобы можно было загрузить такую же фотографию
       closeUploadPhotoPopup();
     }
@@ -59,14 +59,14 @@
 
     // Закрывает сообщение по Esc
     var escapeHandler = function (evt) {
-      if (evt.keyCode === window.utlis.KEYCODE_ESCAPE) {
+      if (evt.keyCode === window.utils.KEYCODE_ESCAPE) {
         closeMessagePopup();
       }
     };
 
     // Закрывает сообщение по Enter
     var enterHandler = function (evt) {
-      if (evt.keyCode === window.utlis.KEYCODE_ENTER) {
+      if (evt.keyCode === window.utils.KEYCODE_ENTER) {
         closeMessagePopup();
       }
     };

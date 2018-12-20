@@ -26,7 +26,7 @@
     };
 
     var moreCommentsButtonEnterHandler = function (evt) {
-      if (evt.keyCode === window.utlis.KEYCODE_ENTER) {
+      if (evt.keyCode === window.utils.KEYCODE_ENTER) {
         showNextComments();
       }
     };
@@ -45,7 +45,7 @@
 
     // Закрывает попап большой фотографии по нажатию Esc
     document.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === window.utlis.KEYCODE_ESCAPE) {
+      if (evt.keyCode === window.utils.KEYCODE_ESCAPE) {
         closePopup();
       }
     });
