@@ -47,7 +47,7 @@
     });
 
     var newButtonEnterHandler = window.debounce(function (evt) {
-      if (evt.keyCode === window.KEYCODE_ENTER) {
+      if (evt.keyCode === window.utlis.KEYCODE_ENTER) {
         window.createBlock(getRandomPhotos(NEW_PHOTOS_COUNT));
       }
     });
@@ -57,7 +57,7 @@
     });
 
     var popularButtonEnterHandler = window.debounce(function (evt) {
-      if (evt.type === 'click' || evt.keyCode === window.KEYCODE_ENTER) {
+      if (evt.type === 'click' || evt.keyCode === window.utlis.KEYCODE_ENTER) {
         window.createBlock(photos);
       }
     });
@@ -69,7 +69,7 @@
     });
 
     var discussedButtonEnterHandler = window.debounce(function (evt) {
-      if (evt.keyCode === window.KEYCODE_ENTER) {
+      if (evt.keyCode === window.utlis.KEYCODE_ENTER) {
         window.createBlock(photos.slice().sort(function (left, right) {
           return right.comments.length - left.comments.length;
         }));

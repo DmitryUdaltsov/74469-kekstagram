@@ -21,7 +21,7 @@
       window.showBigPicture(objectData);
     });
     nextPhoto.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === window.KEYCODE_ENTER) {
+      if (evt.keyCode === window.utlis.KEYCODE_ENTER) {
         window.showBigPicture(objectData);
       }
     });
