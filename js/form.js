@@ -25,6 +25,7 @@
     for (var i = 0; i < filtersRadioButtons.length; i++) {
       filtersRadioButtons[i].removeAttribute('checked');
     }
+    document.querySelector('#effect-none').setAttribute('checked', true);
   });
 
   // Обрабатывает клик по кресту окна загрузки фотографии
