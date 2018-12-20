@@ -4,6 +4,7 @@
   var imgUploadInputElement = document.querySelector('#upload-file');
   var imgUploadOverlayElement = document.querySelector('.img-upload__overlay');
   var closeUploadButton = imgUploadOverlayElement.querySelector('#upload-cancel');
+  var filtersRadioButtons = document.querySelectorAll('.effects__radio');
 
   window.imgUploadPreviewElement = document.querySelector('.img-upload__preview img');
 
@@ -20,6 +21,10 @@
     window.elementControl.hideElement(window.sliderWrapper);
     window.imageSizeValueElement.setAttribute('value', window.DEFAULT_VALUE + '%');
     window.imgUploadPreviewElement.style.transform = 'scale(' + (window.DEFAULT_VALUE / 100) + ')';
+    window.imgUploadPreviewElement.removeAttribute('class');
+    for (var i = 0; i < filtersRadioButtons.length; i++) {
+      filtersRadioButtons[i].removeAttribute('checked');
+    }
   });
 
   // Обрабатывает клик по кресту окна загрузки фотографии
