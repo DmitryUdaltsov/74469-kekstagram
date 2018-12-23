@@ -29,28 +29,28 @@
       });
 
     // Проверка хэштегов
-    for (var i = 0; i < hashtags.length; i++) {
+    hashtags.forEach(function (element, index) {
       // Проверка на повторяющиеся хэш-теги
-      if (hashtags.indexOf(hashtags[i]) !== i) {
-        doubles.list.push(hashtags[i]);
+      if (hashtags.indexOf(element) !== index) {
+        doubles.list.push(element);
       }
       // Проверка на хэштеги более 20 символов
-      if (hashtags[i].length > HASHTAG_MAX_LENGH) {
-        tooBigs.list.push(hashtags[i]);
+      if (element.length > HASHTAG_MAX_LENGH) {
+        tooBigs.list.push(element);
       }
       // Проверка на хэштеги не начинающиеся с '#'
-      if (hashtags[i].indexOf('#') !== 0) {
-        notStartedWithHashs.list.push(hashtags[i]);
+      if (element.indexOf('#') !== 0) {
+        notStartedWithHashs.list.push(element);
       }
       // Проверка на максимальное количество хэштегов
-      if (i > HASHTAG_MAX_COUNT) {
-        moreThanFives.list.push(hashtags[i]);
+      if (index > HASHTAG_MAX_COUNT) {
+        moreThanFives.list.push(element);
       }
       // Проверка на хэштеги состоящие только из '#'
-      if (hashtags[i].length === 1) {
-        onlyHashs.list.push(hashtags[i]);
+      if (element.length === 1) {
+        onlyHashs.list.push(element);
       }
-    }
+    });
 
     var errors = [doubles, tooBigs, notStartedWithHashs, moreThanFives, onlyHashs];
     for (var j = 0; j < errors.length; j++) {
@@ -59,6 +59,7 @@
         return false;
       }
     }
+
     window.hashtagInputElement.setCustomValidity('');
 
     return true;

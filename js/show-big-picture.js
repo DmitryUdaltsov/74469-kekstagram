@@ -1,10 +1,9 @@
 'use strict';
 
 (function () {
+  var LOAD_COMMENTS_COUNT = 5;
   // Показывает большую картинку с комментариями и лайками
   window.showBigPicture = function (objectData) {
-
-    var LOAD_COMMENTS_COUNT = 5;
     var bigPicture = document.querySelector('.big-picture');
     var bigPictureClose = document.querySelector('#picture-cancel');
     var moreCommentsButton = document.querySelector('.comments-loader');

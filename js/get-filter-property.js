@@ -55,7 +55,7 @@
   };
 
   // Устанавливаем листенер нажатия на превьюшки с эффектами
-  for (var effectNumber = 0; effectNumber < previewContainerCollection.length; effectNumber++) {
-    thumbnailClickHandler(previewContainerCollection[effectNumber]);
-  }
+  previewContainerCollection.forEach(function (effect) {
+    thumbnailClickHandler(effect);
+  });
 })();

@@ -1,8 +1,8 @@
 'use strict';
 
 (function () {
+  var NEW_PHOTOS_COUNT = 10; // Количество новых фотографий по фильтру "НОВЫЕ"
   window.getSortedArray = function (photos) {
-    var NEW_PHOTOS_COUNT = 10; // Количество новых фотографий по фильтру "НОВЫЕ"
     var filterPopularButton = document.querySelector('#filter-popular');
     var filterNewButton = document.querySelector('#filter-new');
     var filterDiscussedButton = document.querySelector('#filter-discussed');
@@ -11,15 +11,15 @@
 
     var makeActiveButton = function (activeButton) {
       var imgFiltersButtonCollection = document.querySelectorAll('.img-filters__button');
-      for (var i = 0; i < imgFiltersButtonCollection.length; i++) {
+
+      imgFiltersButtonCollection.forEach(function (button) {
         // Убираем у всех кнопок класс активности
-        imgFiltersButtonCollection[i].classList.remove('img-filters__button--active');
-      }
+        button.classList.remove('img-filters__button--active');
+      });
       activeButton.classList.add('img-filters__button--active');
     };
 
     var getRandomPhotos = function (numberOfPhotos) {
-      var photosNew = [];
       // Заполняет массив числами по порядку от min до max
       var fillArray = function (min, max) {
         var array = [];
@@ -41,12 +41,15 @@
         array.splice(randomIndex, 1);
         return randomElement;
       };
+
       // Заполняем массив для случайных неповторяющихся чисел
       var randomNumbers = fillArray(0, photos.length - 1);
+
       // Заполняем новый массив со случайными неповторяющимися объектами фотографий
-      for (var i = 0; i < numberOfPhotos; i++) {
-        photosNew.push(photos[getRandomNumberFromArray(randomNumbers)]);
-      }
+      var photosNew = Array.apply(null, Array(numberOfPhotos));
+      photosNew.forEach(function (photo, index) {
+        photosNew[index] = photos[getRandomNumberFromArray(randomNumbers)];
+      });
       return photosNew;
     };
 
