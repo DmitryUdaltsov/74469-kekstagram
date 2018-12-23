@@ -53,25 +53,25 @@
     var closeMessagePopup = function () {
       var messageDomElement = document.querySelector('.' + templateSelector);
       document.querySelector('main').removeChild(messageDomElement);
-      document.removeEventListener('click', clickAnywhereHandler);
-      document.removeEventListener('keydown', escapeHandler);
-      button.removeEventListener('keydown', enterHandler);
+      document.removeEventListener('click', documentClickHandler);
+      document.removeEventListener('keydown', documentEscapeHandler);
+      button.removeEventListener('keydown', messageButtonEnterHandler);
     };
 
     // Закрывает сообщение по клику на любой области страницы
-    var clickAnywhereHandler = function () {
+    var documentClickHandler = function () {
       closeMessagePopup();
     };
 
     // Закрывает сообщение по Esc
-    var escapeHandler = function (evt) {
+    var documentEscapeHandler = function (evt) {
       if (evt.keyCode === window.utils.KEYCODE_ESCAPE) {
         closeMessagePopup();
       }
     };
 
     // Закрывает сообщение по Enter
-    var enterHandler = function (evt) {
+    var messageButtonEnterHandler = function (evt) {
       if (evt.keyCode === window.utils.KEYCODE_ENTER) {
         closeMessagePopup();
       }
@@ -83,12 +83,12 @@
     var messageElement = templateBlock.cloneNode(true);
     document.querySelector('main').appendChild(messageElement);
 
-    document.addEventListener('click', clickAnywhereHandler);
-    document.addEventListener('keydown', escapeHandler);
+    document.addEventListener('click', documentClickHandler);
+    document.addEventListener('keydown', documentEscapeHandler);
 
     var buttonClassName = '.' + templateSelector + '__button';
     var button = document.querySelector(buttonClassName);
-    button.addEventListener('keydown', enterHandler);
+    button.addEventListener('keydown', messageButtonEnterHandler);
   };
 
   var showSuccessMessage = function () {
