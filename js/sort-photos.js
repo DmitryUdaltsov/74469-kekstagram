@@ -1,8 +1,8 @@
 'use strict';
 
 (function () {
+  var NEW_PHOTOS_COUNT = 10; // Количество новых фотографий по фильтру "НОВЫЕ"
   window.getSortedArray = function (photos) {
-    var NEW_PHOTOS_COUNT = 10; // Количество новых фотографий по фильтру "НОВЫЕ"
     var filterPopularButton = document.querySelector('#filter-popular');
     var filterNewButton = document.querySelector('#filter-new');
     var filterDiscussedButton = document.querySelector('#filter-discussed');
