@@ -22,9 +22,9 @@
     window.imageSizeValueElement.setAttribute('value', window.DEFAULT_VALUE + '%');
     window.imgUploadPreviewElement.style.transform = 'scale(' + (window.DEFAULT_VALUE / 100) + ')';
     window.imgUploadPreviewElement.removeAttribute('class');
-    for (var i = 0; i < filtersRadioButtons.length; i++) {
-      filtersRadioButtons[i].removeAttribute('checked');
-    }
+    filtersRadioButtons.forEach(function (button) {
+      button.removeAttribute('checked');
+    });
     document.querySelector('#effect-none').setAttribute('checked', true);
   });
 

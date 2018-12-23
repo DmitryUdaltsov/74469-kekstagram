@@ -34,12 +34,13 @@
     var parentNode = document.querySelector(photosClass);
     // Очищаем блок с отрисовыванными плитками фотографий
     var picturesCollection = document.querySelectorAll('.pictures .picture');
-    for (var j = 0; j < picturesCollection.length; j++) {
-      picturesCollection[j].remove();
-    }
-    for (var i = 0; i < commentObjects.length; i++) {
-      fragment.appendChild(createDomElementFromTemplate(photoTemplateId, commentObjects[i]));
-    }
+
+    picturesCollection.forEach(function (element) {
+      element.remove();
+    });
+    commentObjects.forEach(function (element) {
+      fragment.appendChild(createDomElementFromTemplate(photoTemplateId, element));
+    });
     parentNode.appendChild(fragment);
   };
 
