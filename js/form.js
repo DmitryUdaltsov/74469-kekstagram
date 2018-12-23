@@ -15,8 +15,20 @@
 
   // Событие загрузки фотографии
   imgUploadInputElement.addEventListener('change', function () {
-    // Показываем окно изменения фотографии
-    window.elementControl.showElement(imgUploadOverlayElement);
+    var downloadedImage = imgUploadInputElement.files[0];
+    var reader = new FileReader();
+
+    if (downloadedImage) {
+      reader.readAsDataURL(downloadedImage); // reads the data as a URL
+    } else {
+      window.imgUploadPreviewElement.src = '';
+    }
+
+    // Показываем окно изменения фотографии с загруженной фотографией
+    reader.onloadend = function () {
+      window.imgUploadPreviewElement.src = reader.result;
+      window.elementControl.showElement(imgUploadOverlayElement);
+    };
     // Прячем слайдер
     window.elementControl.hideElement(window.sliderWrapper);
     window.imageSizeValueElement.setAttribute('value', window.DEFAULT_VALUE + '%');
